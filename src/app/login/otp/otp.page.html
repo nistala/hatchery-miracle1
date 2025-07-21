@@ -1,0 +1,68 @@
+<!-- <ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>otp</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">otp</ion-title>
+    </ion-toolbar>
+  </ion-header>
+</ion-content> -->
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-icon name="arrow-back-outline"
+      class="absolute left-4 text-xl text-white-800"
+      (click)="goBack()"></ion-icon>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="flex items-center justify-center min-h-screen bg-white px-6">
+  <div class="w-full max-w-md flex flex-col items-center text-center">
+    <!-- Optional illustration (centered & clean) -->
+    <img src="assets/otpverification.jpg" alt="OTP" class=" mb-30 mt-[120px]" />
+
+    <!-- Heading -->
+    <h2 class="text-xl font-semibold mb-1">Enter code</h2>
+    <p class="text-sm text-gray-600 mb-4">
+      Please type the verification code sent to <br />
+      <span class="text-black font-medium">+91 {{ mobile }}</span>
+    </p>
+
+    <div class="flex gap-3 justify-center mb-6">
+  <input #otp1Input type="text" maxlength="1" [(ngModel)]="otp1"
+    (keyup)="onOtpKeyup($event, 1)"
+    class="w-12 h-12 text-xl text-center border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500" />
+
+  <input #otp2Input type="text" maxlength="1" [(ngModel)]="otp2"
+    (keyup)="onOtpKeyup($event, 2)"
+    class="w-12 h-12 text-xl text-center border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500" />
+
+  <input #otp3Input type="text" maxlength="1" [(ngModel)]="otp3"
+    (keyup)="onOtpKeyup($event, 3)"
+    class="w-12 h-12 text-xl text-center border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500" />
+
+  <input #otp4Input type="text" maxlength="1" [(ngModel)]="otp4"
+    (keyup)="onOtpKeyup($event, 4)"
+    class="w-12 h-12 text-xl text-center border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500" />
+</div>
+
+
+    <!-- Continue Button -->
+    <ion-button expand="block" class="w-full max-w-xs rounded-lg h-12 text-white"
+      style="--background: #0d9488" (click)="verifyOtp()">
+      CONTINUE →
+    </ion-button>
+
+    <!-- Resend link -->
+    <p class="text-sm text-gray-600 mt-4">
+      Didn’t receive a code?
+      <a class="text-teal-600 font-medium cursor-pointer" (click)="resendOtp()">Resend</a>
+    </p>
+  </div>
+</ion-content>
+
+

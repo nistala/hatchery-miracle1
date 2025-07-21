@@ -1,0 +1,32 @@
+<ion-content class="p-6 bg-gray-50">
+  <!-- Profile Image -->
+  <div class="flex justify-center mt-6">
+    <img
+      src="assets/jones_202412161609.png"
+      alt="Profile"
+      class="w-24 h-24 rounded-full border-4 border-white shadow-md"
+    />
+  </div>
+
+  <!-- Profile Info -->
+  <div class="mt-6 text-center">
+    <h2 class="text-xl font-semibold text-gray-800">{{ user.name }}</h2>
+    <p class="text-sm text-gray-600 mt-1"><b>Phone:</b> {{ user.phoneNumber }}</p>
+    <p class="text-sm text-gray-600"><b>VehicleType:</b> {{ user.vehicletype}}</p>
+  </div>
+
+  <!-- Logout Button -->
+  <div class="mt-8 flex justify-center">
+    <button
+      (click)="logout()"
+      class="px-6 py-2 bg-red-600 text-white rounded-md shadow hover:bg-red-700 transition-colors"
+    >
+      <ion-icon name="log-out-outline" class="text-xl mr-2 align-middle"></ion-icon>
+      Logout
+    </button>
+  </div>
+  <div class="mt-4 text-center text-gray-500">
+    <p class="text-sm">Version 1.0.0</p>
+    <p class="text-xs">© 2025 TruckTurner. All rights reserved.</p>
+  </div>
+</ion-content>

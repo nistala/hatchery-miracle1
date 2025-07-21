@@ -1,0 +1,7 @@
+{
+  "name": "Hatchery",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

@@ -1,0 +1,76 @@
+<div class="p-6 max-w-3xl mx-auto">
+  <!-- Icon & Title -->
+  <div class="flex flex-col items-center mb-4">
+    <div
+      class="bg-green-900 text-white rounded-full w-12 h-12 flex items-center justify-center text-2xl mb-2"
+    >
+      📅
+    </div>
+    <h2 class="text-2xl font-semibold">Driver Check-in</h2>
+    <p class="text-gray-600 text-center mt-1">
+      No active check-in round. Please wait for the owner to start a new round.
+    </p>
+    <p class="text-gray-600 text-center mt-1">
+      <b
+        >Total Drivers To Check-In:
+        <span class="font-semibold">{{ availableCount }}</span></b
+      >
+    </p>
+  </div>
+
+  <!-- Search -->
+  <div class="bg-white p-1 my-2">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="filterDrivers()"
+      placeholder="Search for your name or vehicle number..."
+      class="w-full border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
+    />
+  </div>
+
+  <!-- Driver Cards -->
+  <div class="overflow-y-scroll h-[52vh]">
+    <div
+      *ngFor="let driver of driversList"
+      class="bg-green-50 rounded-lg p-4 mb-4 border"
+    >
+      <div class="flex justify-between items-center mb-2">
+        <p class="font-semibold">{{ driver.driverName.toUpperCase() }}</p>
+
+        <div class="flex gap-2 ml-auto">
+          <button
+            class="bg-green-600 text-white text-xs px-3 py-1 rounded hover:bg-green-900"
+            (click)="changeDriverStatus(driver)"
+            [disabled]="driversStatus"
+          >
+            {{ driversStatus ? 'Available' : 'Check-In' }}
+          </button>
+
+          <button
+            *ngIf="!driversStatus"
+            class="bg-[#0d416b] text-white text-xs px-3 py-1 rounded hover:bg-[#0d416b] hover:opacity-90"
+            (click)="skipDriverCurrentRound(driver)"
+          >
+            Skip
+          </button>
+        </div>
+      </div>
+
+      <p class="text-sm text-gray-700">
+        <b>Owner Name:</b> {{ driver.ownerName }}
+      </p>
+      <p class="text-sm text-gray-700"><b>Phone:</b> {{ driver.phoneNumber}}</p>
+      <p class="text-sm text-gray-700">
+        <b>Vehicle Number: </b> {{ driver.vehicleNumber === null ? '-' :
+        driver.vehicleNumber }}
+      </p>
+    </div>
+    <div
+      *ngIf="driversList.length === 0"
+      class="text-center text-gray-500 mt-8 text-lg"
+    >
+      No drivers for Check-In
+    </div>
+  </div>
+</div>

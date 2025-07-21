@@ -1,0 +1,145 @@
+<div class="max-w-md mx-auto p-6 bg-white rounded-xl shadow">
+  <div class="flex justify-center mb-4">
+    <div
+      class="bg-green-800 text-white rounded-full w-12 h-12 flex items-center justify-center text-2xl"
+    >
+      👤
+    </div>
+  </div>
+  <h2 class="text-xl font-semibold text-center mb-1">Driver Registration</h2>
+  <p class="text-sm text-gray-600 text-center mb-6">
+    Register to join the Hatchery driver rotation system
+  </p>
+
+  <form  [formGroup]="driverRegisterForm" (submit)="registerDriver()" class="space-y-4">
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Driver Name *</label>
+      <ion-input
+        type="text"
+       formControlName="fullName"
+        name="fullName"
+        (ionInput)="onInputLimit($event,'fullName')"
+        required
+        minlength="3"
+        class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+      ></ion-input>
+      <p
+        *ngIf="this.driverRegisterForm.get('fullName')?.invalid && this.driverRegisterForm.get('fullName')?.touched"
+        class="text-red-600 text-xs"
+      >
+        Full name is required (min 3 characters).
+      </p>
+    </div>
+<div class="w-full max-w-xs">
+  <label class="block text-sm font-medium text-gray-700">Owner Name *</label>
+  <ion-select
+    placeholder="Select owner name"
+    formControlName="ownerName"
+    name="ownerName"
+    required
+    class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+  >
+    <ion-select-option *ngFor="let item of ownerList" [value]="item">
+      {{ item.ownerName }}
+    </ion-select-option>
+  </ion-select>
+  <p *ngIf="this.driverRegisterForm.get('ownerName')?.invalid && this.driverRegisterForm.get('ownerName')?.touched" class="text-red-600 text-xs mt-1">
+    Please select a Owner Name.
+  </p>
+</div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700"
+        >Driver Phone Number *</label
+      >
+      <ion-input
+        type="tel"
+
+        inputmode="numeric" maxlength="12"
+           fill="outline" formControlName="phone"
+          (ionInput)="onPhoneInput($event)"
+        class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+      ></ion-input>
+           <ion-text color="danger"
+              *ngIf="driverRegisterForm.get('phone')?.invalid && (driverRegisterForm.get('phone')?.dirty || driverRegisterForm.get('phone')?.touched) ">
+              <small class="text-xs text-red-600 ml-2"
+                *ngIf="driverRegisterForm.get('phone')?.errors?.['required']">
+                Phone Number is required.
+              </small>
+<small class="text-xs text-red-600 ml-2"
+                *ngIf="driverRegisterForm.get('phone')?.errors?.['startsWithInvalid']">
+                Enter a valid phone number starting with 6–9 (e.g.,
+                987-654-3210).
+              </small>
+              <small class="text-xs text-red-600 ml-2"
+                *ngIf="driverRegisterForm.get('phone')?.errors?.['lengthInvalid']">
+                Phone number must be exactly 10 digits long.
+              </small>
+           </ion-text>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700"
+        >Driver’s License Number *</label
+      >
+     <ion-input
+        type="text"
+        name="licenseNumber"
+       formControlName="licenseNumber"
+        required
+         (ionInput)="onInputNumberLimit($event,'licenseNumber')"
+        minlength="5"
+        class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+    ></ion-input>
+      <p
+        *ngIf="this.driverRegisterForm.get('licenseNumber')?.invalid && this.driverRegisterForm.get('licenseNumber')?.touched"
+        class="text-red-600 text-xs"
+      >
+        License number is required (min 5 characters).
+      </p>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700"
+        >Driver’s Vehicle Number *</label
+      >
+      <ion-input
+        type="text"
+        name="vehicleNumber"
+        formControlName="vehicleNumber"
+        required
+        (ionInput)="onInputNumberLimit($event,'vehicleNumber')"
+        minlength="5"
+        class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+      ></ion-input>
+      <p
+        *ngIf="this.driverRegisterForm.get('vehicleNumber')?.invalid && this.driverRegisterForm.get('vehicleNumber')?.touched"
+        class="text-red-600 text-xs"
+      >
+        Vehicle Number is required (min 5 characters).
+      </p>
+    </div>
+<div class="w-full max-w-xs">
+  <label class="block text-sm font-medium text-gray-700">Vehicle Type *</label>
+  <ion-select
+    placeholder="Select vehicle type"
+    formControlName="truckType"
+    name="truckType"
+    required
+    class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+  >
+    <ion-select-option *ngFor="let type of truckTypes" [value]="type">
+      {{ type }}
+    </ion-select-option>
+  </ion-select>
+  <p *ngIf="this.driverRegisterForm.get('truckType')?.invalid && this.driverRegisterForm.get('truckType')?.touched" class="text-red-600 text-xs mt-1">
+    Please select a vehicle type.
+  </p>
+</div>
+    <button  (click)="registerDriver()"
+      type="submit"
+      [disabled]="driverRegisterForm.invalid"
+      class="w-full bg-green-800 text-white py-2 rounded hover:bg-green-900 transition-colors"
+    >
+      Register as Driver
+    </button>
+  </form>
+</div>

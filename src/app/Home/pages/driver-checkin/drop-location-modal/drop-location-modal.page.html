@@ -1,0 +1,51 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>Select Drop Location</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-label>Drop Location</ion-label>
+    <ion-select [(ngModel)]="selectedLocation" interface="popover">
+      <ion-select-option *ngFor="let loc of dropLocations" [value]="loc">{{ loc }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-button expand="block" class="mt-4" (click)="confirm()">Confirm</ion-button>
+</ion-content> -->
+
+
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>Enter Text</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-label position="floating">Your Text</ion-label>
+    <ion-input [(ngModel)]="inputValue"></ion-input>
+  </ion-item>
+
+  <ion-button expand="block" class="ion-margin-top" (click)="confirm()">Submit</ion-button>
+</ion-content> -->
+
+
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-label>Drop Location</ion-label>
+    <ion-select [(ngModel)]="selectedLocation" interface="popover">
+      <ion-select-option *ngFor="let loc of dropLocations" [value]="loc">{{ loc }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-button expand="block" class="mt-4" (click)="confirm()">Confirm</ion-button>
+</ion-content>
+

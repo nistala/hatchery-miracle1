@@ -1,0 +1,384 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-icon name="arrow-back-outline"
+      class="absolute left-4 text-xl text-white-800"
+      (click)="goBack()"></ion-icon>
+    <p class="text-white-800 font-bold text-center">Registration</p>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="bg-white">
+  <div class="p-4 max-w-md mx-auto">
+    <form [formGroup]="registrationForm" (ngSubmit)="submitForm()">
+      <ion-card class="rounded-2xl shadow-none bg-[#F0F0F0] !-mx-[5px]">
+        <ion-card-content>
+          <ion-select formControlName="role" label="Role *"
+            label-placement="floating" fill="outline"
+            interface="popover"
+            class="w-full font-medium text-sm text-gray-700">
+            <ion-select-option value="buyer">Buyer/Agent</ion-select-option>
+          </ion-select>
+
+          <div class="flex items-center my-4">
+            <div class="flex-grow border-t border-gray-300"></div>
+            <span class="px-3 text-sm font-semibold text-gray-700">User
+              Information</span>
+            <div class="flex-grow border-t border-gray-300"></div>
+          </div>
+
+          <div class="mt-2 space-y-3">
+            <ion-input type="text" formControlName="firstName" type="text"
+              label="FirstName *"
+              (ionInput)="onInputLimit($event, 'firstName')"
+              label-placement="floating"
+              fill="outline" maxlength="35">
+            </ion-input>
+            <ion-text color="danger"
+              *ngIf="formControls['firstName'].invalid && (formControls['firstName'].dirty || formControls['firstName'].touched)">
+              <small class="text-xs text-red-600 ml-2">
+                <ng-container
+                  *ngIf="formControls['firstName'].errors as errors">
+                  <span *ngIf="errors['required']">First Name is
+                    required.</span>
+                  <span
+                    *ngIf="!errors['required'] && errors['minlength']">Minimum 1
+                    characters required.</span>
+                  <!-- <span
+                    *ngIf="!errors['required'] && !errors['minlength'] && errors['maxlength']">
+                    Maximum allowed length is 35 characters.
+                  </span> -->
+                  <span
+                    *ngIf="errors['maxlength'] && !errors['required'] && !errors['minlength']">
+                    Maximum allowed length is 35 characters.
+                  </span>
+                </ng-container>
+              </small>
+            </ion-text>
+            <!-- Last Name -->
+            <ion-input type="text" formControlName="lastName" type="text"
+              label="Last Name *"
+              (ionInput)="onInputLimit($event, 'lastName')"
+              label-placement="floating"
+              fill="outline" maxlength="35">
+            </ion-input>
+            <ion-text color="danger"
+              *ngIf="formControls['lastName'].invalid && (formControls['lastName'].dirty || formControls['lastName'].touched)">
+              <small class="text-xs text-red-600 ml-2">
+                <ng-container *ngIf="formControls['lastName'].errors as errors">
+                  <span *ngIf="errors['required']">Last Name is
+                    required.</span>
+                  <span
+                    *ngIf="!errors['required'] && errors['minlength']">Minimum
+                    1 characters required.</span>
+                  <span
+                    *ngIf="!errors['required'] && !errors['minlength'] && errors['maxlength']">
+                    Maximum allowed length is 35 characters.
+                  </span>
+                </ng-container>
+              </small>
+            </ion-text>
+
+            <!-- Phone Number -->
+            <ion-input type="tel" label="Phone Number *"
+              label-placement="floating" inputmode="numeric" maxlength="12"
+              fill="outline" formControlName="phoneNumber"
+              (ionInput)="onPhoneInput($event)" (ionBlur)="phoneExists()">
+            </ion-input>
+
+            <ion-text color="danger"
+              *ngIf="registrationForm.get('phoneNumber')?.invalid && (registrationForm.get('phoneNumber')?.dirty || registrationForm.get('phoneNumber')?.touched) ">
+
+              <small class="text-xs text-red-600 ml-2"
+                *ngIf="registrationForm.get('phoneNumber')?.errors?.['required']">
+                Phone Number is required.
+              </small>
+
+              <small class="text-xs text-red-600 ml-2"
+                *ngIf="registrationForm.get('phoneNumber')?.errors?.['startsWithInvalid']">
+                Enter a valid phone number starting with 6–9 (e.g.,
+                987-654-3210).
+              </small>
+
+              <small class="text-xs text-red-600 ml-2"
+                *ngIf="registrationForm.get('phoneNumber')?.errors?.['lengthInvalid']">
+                Phone number must be exactly 10 digits long.
+              </small>
+
+              <small class="text-xs text-red-600 ml-2"
+                *ngIf="registrationForm.get('phoneNumber')?.errors?.['exists']">
+                Phone number already exists.
+              </small>
+            </ion-text>
+
+            <!-- Aadhaar Number Input -->
+            <ion-input type="text" label="Aadhaar Number *"
+              label-placement="floating"
+              inputmode="numeric" maxlength="14"
+              fill="outline" formControlName="aadhaarNumber"
+              [value]="maskedAadhaar"
+              (ionInput)="onAadhaarInput($event)"
+              (ionBlur)="checkAadhaarExists()">
+              <ion-icon *ngIf="actualAadhaar.length > 0" slot="end"
+                [name]="showFullAadhaar ? 'eye-off-outline' : 'eye-outline'"
+                (click)="showFullAadhaar = !showFullAadhaar"
+                class="text-xl pr-2 cursor-pointer">
+              </ion-icon>
+            </ion-input>
+
+            <!-- Validation Message -->
+            <ion-text color="danger"
+              *ngIf="!aadhaarExists && registrationForm.get('aadhaarNumber')?.invalid && (registrationForm.get('aadhaarNumber')?.dirty || registrationForm.get('aadhaarNumber')?.touched)">
+              <small class="text-xs text-red-600 ml-2">
+                Aadhaar Number must be 12 digits.
+              </small>
+            </ion-text>
+
+            <ion-text *ngIf="aadhaarExists" color="danger" class="ml-2">
+              <small class="text-xs text-red-600 ml-2">
+                Aadhaar Number already exists.
+              </small>
+            </ion-text>
+
+            <ion-input type="email" formControlName="email" label="Email *"
+              label-placement="floating" fill="outline"
+              (ionInput)="onEmailInput($event)">
+            </ion-input>
+
+            <!-- Email Validation Error Message -->
+            <ion-text color="danger"
+              *ngIf="registrationForm.get('email')?.invalid && 
+         (registrationForm.get('email')?.dirty || registrationForm.get('email')?.touched)">
+              <small class="text-xs text-red-600 ml-2">
+                <ng-container
+                  *ngIf="registrationForm.get('email')?.errors?.['required']">
+                  Email is required.
+                </ng-container>
+                <ng-container
+                  *ngIf="registrationForm.get('email')?.errors?.['invalidEmail']">
+                  Please enter a valid email address.
+                </ng-container>
+              </small>
+            </ion-text>
+            <!-- Gender Select -->
+            <ion-select formControlName="gender" label="Gender *"
+              label-placement="floating" fill="outline"
+              interface="popover"
+              class="w-full font-medium text-sm text-gray-700">
+              <ion-select-option value="male">Male</ion-select-option>
+              <ion-select-option value="female">Female</ion-select-option>
+            </ion-select>
+
+            <!-- Error Message -->
+            <ion-text color="danger"
+              *ngIf="formControls['gender'].invalid && (formControls['gender'].dirty || formControls['gender'].touched)">
+              <small class="text-xs text-red-600 ml-2">
+                Gender is required.
+              </small>
+            </ion-text>
+            <!-- State -->
+            <ion-select formControlName="state" label="Select State *"
+              label-placement="floating" fill="outline"
+              interface="popover"
+              (ionChange)="onLocationChange('state', $event)">
+              <ion-select-option *ngFor="let state of stateList"
+                [value]="state.stateId">{{ state.label
+                }}</ion-select-option>
+            </ion-select>
+            <ion-text color="danger" class="ml-2"
+              *ngIf="registrationForm.get('state')?.touched && registrationForm.get('state')?.invalid">
+              <small>State is required</small>
+            </ion-text>
+
+            <!-- District -->
+            <ion-select formControlName="district" label="Select District *"
+              label-placement="floating" fill="outline"
+              interface="popover"
+              (ionChange)="onLocationChange('district', $event)">
+              <ion-select-option *ngFor="let district of districtList"
+                [value]="district.districtId">{{ district.districtName
+                }}</ion-select-option>
+            </ion-select>
+            <ion-text color="danger" class="ml-2"
+              *ngIf="registrationForm.get('district')?.touched && registrationForm.get('district')?.invalid">
+              <small>District is required</small>
+            </ion-text>
+
+            <!-- Constituency -->
+            <ion-select formControlName="constituency"
+              label="Select Constituency *" label-placement="floating"
+              fill="outline"
+              (ionChange)="onLocationChange('constituency', $event)"
+              interface="popover">
+              <ion-select-option *ngFor="let block of blockList"
+                [value]="block.id">{{
+                block.blockName }}</ion-select-option>
+            </ion-select>
+            <ion-text color="danger" class="ml-2"
+              *ngIf="registrationForm.get('constituency')?.touched && registrationForm.get('constituency')?.invalid">
+              <small>Constituency is required</small>
+            </ion-text>
+
+            <!-- Mandal -->
+            <ion-select formControlName="mandal" label="Select Mandal *"
+              label-placement="floating" fill="outline" interface="popover"
+              (ionChange)="onLocationChange('mandal', $event)">
+              <ion-select-option *ngFor="let mandal of mandalList"
+                [value]="mandal.id">{{ mandal.mandalName }}</ion-select-option>
+            </ion-select>
+
+            <ion-text color="danger" class="ml-2"
+              *ngIf="registrationForm.get('mandal')?.touched && registrationForm.get('mandal')?.invalid">
+              <small>Mandal is required</small>
+            </ion-text>
+
+            <!-- panchayat -->
+            <ion-select formControlName="panchayat" label="Select Village/Panchayat *"
+              label-placement="floating" fill="outline" interface="popover"
+              (ionChange)="onLocationChange('panchayat', $event)">
+              <ion-select-option *ngFor="let panchayat of panchayatList"
+                [value]="panchayat.panchayatId">{{ panchayat.panchayatName
+                }}</ion-select-option>
+            </ion-select>
+
+            <ion-text color="danger" class="ml-2"
+              *ngIf="registrationForm.get('panchayat')?.touched && registrationForm.get('panchayat')?.invalid">
+              <small>Panchayat is required</small>
+            </ion-text>
+
+            <!-- Village -->
+            <!-- <ion-select formControlName="village" label="Select Village *"
+              label-placement="floating" fill="outline" interface="popover">
+              <ion-select-option *ngFor="let village of villageList"
+                [value]="village.villageId">{{ village.villageName
+                }}</ion-select-option>
+            </ion-select>
+
+            <ion-text color="danger" class="ml-2"
+              *ngIf="registrationForm.get('village')?.touched && registrationForm.get('village')?.invalid">
+              <small>Village is required</small>
+            </ion-text> -->
+
+            <!-- Hamlet -->
+            <ion-select formControlName="hamlet" label="Select Hamlet"
+              label-placement="floating" fill="outline"
+              interface="popover">
+              <ion-select-option *ngFor="let hamlet of hamletList"
+                [value]="hamlet.hamletId">{{ hamlet.hamletName
+                }}</ion-select-option>
+            </ion-select>
+
+            <!--  -->
+            <ion-textarea formControlName="address" label="Address *"
+              label-placement="floating" fill="outline" interface="popover"
+              placeholder="Enter Address" maxlength="250"
+              (ionChange)="maxData($event,20,'')"></ion-textarea>
+            <ion-text color="danger"
+              *ngIf="registrationForm?.get('address')?.touched && registrationForm?.get('address')?.invalid">
+              <small
+                *ngIf="registrationForm?.get('address')?.errors?.['required']">
+                Address is required.
+              </small>
+              <small
+                *ngIf="registrationForm?.get('address')?.errors?.['maxlength']">
+                Address cannot exceed 250 characters.
+              </small>
+            </ion-text>
+            <!-- Password Input -->
+            <ion-input
+              [type]="showPassword ? 'text' : 'password'"
+              label="Password *"
+              label-placement="floating"
+              maxlength="19"
+              fill="outline"
+              formControlName="password"
+              (ionInput)="onPasswordInput($event)">
+
+              <ion-icon
+                *ngIf="formControls['password'].value?.length > 0"
+                slot="end"
+                [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"
+                (click)="showPassword = !showPassword"
+                class="text-xl pr-2 cursor-pointer">
+              </ion-icon>
+            </ion-input>
+            <!-- Validation Message -->
+            <div
+              *ngIf="formControls['password'].touched || formControls['password'].dirty"
+              class="text-xs text-red-600 ml-2 mt-1">
+              <div
+                *ngIf="formControls['password'].errors?.['required']">Passwordis
+                required.</div>
+              <div *ngIf="formControls['password'].errors?.['maxlength']">Max 15
+                characters allowed.</div>
+              <div *ngIf="formControls['password'].errors?.['passwordStrength']"
+                class="text-gray-700 mt-2 space-y-1">
+                <div class="flex items-center gap-2"
+                  [class.text-green-600]="passwordStrength.hasUpperCase">
+                  <input type="checkbox"
+                    [checked]="passwordStrength.hasUpperCase" disabled />
+                  <span>At least one uppercase letter</span>
+                </div>
+                <div class="flex items-center gap-2"
+                  [class.text-green-600]="passwordStrength.hasLowerCase">
+                  <input type="checkbox"
+                    [checked]="passwordStrength.hasLowerCase" disabled />
+                  <span>At least one lowercase letter</span>
+                </div>
+                <div class="flex items-center gap-2"
+                  [class.text-green-600]="passwordStrength.hasDigit">
+                  <input type="checkbox" [checked]="passwordStrength.hasDigit"
+                    disabled />
+                  <span>At least one digit</span>
+                </div>
+                <div class="flex items-center gap-2"
+                  [class.text-green-600]="passwordStrength.hasSpecialChar">
+                  <input type="checkbox"
+                    [checked]="passwordStrength.hasSpecialChar" disabled />
+                  <span>At least one special character</span>
+                </div>
+                <div class="flex items-center gap-2"
+                  [class.text-green-600]="passwordStrength.isValidLength">
+                  <input type="checkbox"
+                    [checked]="passwordStrength.isValidLength" disabled />
+                  <span>Minimum 8 characters</span>
+                </div>
+              </div>
+            </div>
+            <ion-input
+              [type]="showPassword ? 'text' : 'password'"
+              label="Confirm Password *"
+              label-placement="floating"
+              fill="outline"
+              formControlName="confirmPassword">
+            </ion-input>
+
+            <div
+              *ngIf="formControls['confirmPassword'].touched || formControls['confirmPassword'].dirty"
+              class="text-xs text-red-600 ml-2 mt-1">
+
+              <ng-container
+                *ngIf="formControls['confirmPassword'].errors as errors">
+                <div *ngIf="errors['required']">Confirm Password is
+                  required.</div>
+                <div *ngIf="errors['mismatch']">Passwords do not match.</div>
+              </ng-container>
+            </div>
+
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Buttons -->
+      <div class="flex gap-4 mt-4">
+        <ion-button expand="block" fill="outline" class="flex-1" type="button"
+          (click)="onCancel()">Reset</ion-button>
+        <ion-button expand="block" style="--background: #6C7351;" class="flex-1"
+          type="submit"
+          (click)="submitRegistrationForm()"
+          [disabled]="registrationForm.invalid && imagePreviewUrls.length">
+          Submit
+        </ion-button>
+      </div>
+    </form>
+  </div>
+</ion-content>

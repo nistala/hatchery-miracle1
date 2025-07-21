@@ -1,0 +1,20 @@
+<ion-app>
+  <ion-content>
+    <ion-router-outlet></ion-router-outlet>
+  </ion-content>
+
+  <ion-footer
+  *ngIf="!path.includes('login') && !path.includes('signup') && !path.includes('otp') && !path.includes('registration') && !path.includes('forgot-password')">
+  <!-- <ion-toolbar color="primary">
+    <div class="flex justify-around items-center w-full text-white text-xs pt-2 pb-1">
+      <div routerLink="/farmers-list" class="flex flex-col items-center justify-center w-12">
+        <ion-icon name="leaf-outline" class="text-xl"></ion-icon>
+        <span>Farmers</span>
+      </div>
+    </div>
+  </ion-toolbar> -->
+</ion-footer>
+
+
+
+</ion-app>

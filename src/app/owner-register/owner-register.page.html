@@ -1,0 +1,104 @@
+<div class="max-w-md mx-auto p-6 bg-white rounded-xl shadow">
+  <div class="flex justify-center mb-4">
+    <div class="bg-green-800 text-white rounded-full w-12 h-12 flex items-center justify-center text-2xl">
+      🧑‍💼
+    </div>
+  </div>
+  <h2 class="text-xl font-semibold text-center mb-1">Owner Registration</h2>
+  <p class="text-sm text-gray-600 text-center mb-6">
+    Register as an owner to manage your drivers and vehicles
+  </p>
+
+  <form [formGroup]="ownerRegisterForm" (ngSubmit)="registerOwner()" class="space-y-4">
+
+    <!-- Owner Name -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Owner Name *</label>
+      <ion-input
+        type="text"
+        formControlName="ownerName"
+        (ionInput)="onInputLimit($event, 'ownerName')"
+        required
+        class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+      ></ion-input>
+      <p *ngIf="ownerRegisterForm.get('ownerName')?.invalid && ownerRegisterForm.get('ownerName')?.touched" class="text-red-600 text-xs">
+        Owner name is required (min 6 characters).
+      </p>
+    </div>
+
+    <!-- Password -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Password *</label>
+      <ion-input
+        type="password"
+        formControlName="password"
+        required
+        minlength="6"
+        class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+      ></ion-input>
+      <p *ngIf="ownerRegisterForm.get('password')?.invalid && ownerRegisterForm.get('password')?.touched" class="text-red-600 text-xs">
+        Password must be at least 6 characters.
+      </p>
+    </div>
+
+    <!-- Phone Number -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Phone Number *</label>
+      <ion-input
+        type="tel"
+        formControlName="phoneNumber"
+        inputmode="numeric"
+        maxlength="10"
+        (ionInput)="onPhoneInput($event)"
+        class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+      ></ion-input>
+      <ion-text color="danger" *ngIf="ownerRegisterForm.get('phoneNumber')?.invalid && (ownerRegisterForm.get('phoneNumber')?.touched || ownerRegisterForm.get('phoneNumber')?.dirty)">
+        <small class="text-xs text-red-600 ml-2" *ngIf="ownerRegisterForm.get('phoneNumber')?.errors?.['required']">
+          Phone Number is required.
+        </small>
+        <small class="text-xs text-red-600 ml-2" *ngIf="ownerRegisterForm.get('phoneNumber')?.errors?.['pattern']">
+          Enter a valid 10-digit phone number.
+        </small>
+      </ion-text>
+    </div>
+
+    <!-- Vehicle Number -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Vehicle Number *</label>
+      <ion-input
+        type="text"
+        formControlName="vehicleNumber"
+        required
+        minlength="5"
+        (ionInput)="onInputLimit($event, 'vehicleNumber')"
+        class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+      ></ion-input>
+      <p *ngIf="ownerRegisterForm.get('vehicleNumber')?.invalid && ownerRegisterForm.get('vehicleNumber')?.touched" class="text-red-600 text-xs">
+        Vehicle number is required (min 10 characters).
+      </p>
+    </div>
+<!-- <div>
+  <label class="block text-sm font-medium text-gray-700">Vehicle Number *</label>
+  <ion-select
+    formControlName="vehicleNumber"
+    placeholder="Select Vehicle Number"
+    interface="popover"
+    class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+  >
+    <ion-select-option *ngFor="let number of vehicleNumbers" [value]="number">
+      {{ number }}
+    </ion-select-option>
+  </ion-select>
+  <p *ngIf="ownerRegisterForm.get('vehicleNumber')?.invalid && ownerRegisterForm.get('vehicleNumber')?.touched" class="text-red-600 text-xs">
+    Vehicle number is required.
+  </p>
+</div> -->
+    <button
+      type="submit"
+      [disabled]="ownerRegisterForm.invalid"
+      class="w-full bg-green-800 text-white py-2 rounded hover:bg-green-900 transition-colors"
+    >
+      Register as Owner
+    </button>
+  </form>
+</div>

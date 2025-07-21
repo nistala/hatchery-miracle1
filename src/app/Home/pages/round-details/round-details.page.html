@@ -1,0 +1,113 @@
+<div class="p-6 max-w-3xl mx-auto w-full">
+  <!-- Icon & Title -->
+  <div class="flex flex-col items-center mb-4">
+    <div
+      class="bg-green-900 text-white rounded-full w-12 h-12 flex items-center justify-center text-2xl mb-2"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-7 h-7"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <rect
+          x="3"
+          y="7"
+          width="18"
+          height="13"
+          rx="2"
+          stroke="currentColor"
+          stroke-width="2"
+          fill="none"
+        />
+        <circle cx="7.5" cy="14" r="1.5" fill="currentColor" />
+        <circle cx="16.5" cy="14" r="1.5" fill="currentColor" />
+        <path d="M3 10h18" stroke="currentColor" stroke-width="2" />
+        <path
+          d="M7.5 17v1M16.5 17v1"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+        />
+        <rect
+          x="8.5"
+          y="11.5"
+          width="7"
+          height="2"
+          rx="1"
+          fill="currentColor"
+        />
+      </svg>
+    </div>
+    <h2 class="text-2xl font-semibold">Completed Round Details</h2>
+    <p class="text-gray-600 text-center mt-1">
+      Round ID: <span class="font-semibold">{{ roundId}}</span>
+    </p>
+    <p class="text-gray-600 text-center mt-1">
+      Total Drivers: <span class="font-semibold">{{ completedCount }}</span>
+    </p>
+  </div>
+
+ <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+    <div class="border rounded-xl p-4 text-center shadow-md">🕒
+      <p class="text-sm text-gray-600 mt-2"><b>Start Time</b></p>
+      <div class="text-xl font-bold text-green-900 flex justify-center items-center gap-2">
+         <span>{{ startTime }}</span>
+      </div>
+    </div>
+    <div class="border rounded-xl p-4 text-center shadow-md">🕒
+      <p class="text-sm text-gray-600 mt-2"><b>End Time</b></p>
+      <div class="text-xl font-bold text-green-600 flex justify-center items-center gap-2">
+         <span>{{ endTime }}</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Search --
+  <div class="bg-white p-1 my-2">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="filterDrivers()"
+      placeholder="Search for your name or vehicle number..."
+      class="w-full border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
+    />
+  </div>
+
+  <!-- Driver Cards -->
+  <div class="overflow-y-scroll h-[52vh]">
+    <!-- Summary Badges Row -->
+    <div
+      *ngFor="let driver of roundDetailList"
+      [ngClass]="{
+    'bg-gray-100': driver.status === 'Skip',
+    'bg-green-50': driver.status !== 'Skip'
+  }"
+      class="rounded-lg p-4 mb-4 border"
+    >
+      <div class="flex justify-between items-center mb-2">
+        <div class="flex items-center gap-2">
+          <span class="text-green-800">🕒</span>
+          <h4 class="font-semibold">{{ driver.driverName.toUpperCase()}}</h4>
+          <span class="text-xs bg-green-600 text-white px-2 py-0.5 rounded"
+            >{{ driver.status }}</span
+          >
+        </div>
+      </div>
+      <p class="text-sm text-gray-700">
+        <b>Owner Name:</b> {{ driver.ownerName }}
+      </p>
+      <p class="text-sm text-gray-700"><b>Phone:</b> {{ driver.phoneNumber}}</p>
+      <p class="text-sm text-gray-700">
+        <b>Vehicle Number: </b> {{ driver.vehicleNumber === null ? '-' :
+        driver.vehicleNumber }}
+      </p>
+      <p class="text-sm text-gray-700">
+        <b>Drop Location: </b> {{ driver.dropLocation === null ? '-' :
+        driver.dropLocation }}
+      </p>
+    </div>
+  </div>
+</div>
