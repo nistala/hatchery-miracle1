@@ -3,17 +3,25 @@ import { ToastController } from '@ionic/angular';
 import { ApiServiceService } from 'src/app/services/api-service.service';
 import { apis } from 'src/app/services/apis';
 import { Router } from '@angular/router';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { formatNumber } from '@angular/common';
 
 @Component({
   selector: 'app-driver-registration',
   templateUrl: './driver-registration.page.html',
   styleUrls: ['./driver-registration.page.scss'],
-  standalone: false
+  standalone: false,
 })
 export class DriverRegistrationPage implements OnInit {
   driverRegisterForm!: FormGroup;
+  ownerRegisterForm!: FormGroup;
   driver: any = {
     fullName: '',
     ownerName: '',
@@ -22,62 +30,128 @@ export class DriverRegistrationPage implements OnInit {
     licenseNumber: '',
     vehicleNumber: '',
   };
-  truckTypes: string[] = ['Ape Xtra LDX','Bolero Pik-Up 4x2','Bolero Pik-Up ExtraStrong','Bolero Maxitruck Plus','DCM 4-wheeler', 'DCM Toyota HT', 'DCM 909', 'Tata 407 EX', 'Tata 407 Pickup','Tata 407 Gold SFC','Tata 1109 EX','Tata 1120 LPT','Tata Ace Gold'];
-ownerList:any[] = [];
+  truckTypes: string[] = [
+    'Ape Xtra LDX',
+    'Bolero Pik-Up 4x2',
+    'Bolero Pik-Up ExtraStrong',
+    'Bolero Maxitruck Plus',
+    'DCM 4-wheeler',
+    'DCM Toyota HT',
+    'DCM 909',
+    'Tata 407 EX',
+    'Tata 407 Pickup',
+    'Tata 407 Gold SFC',
+    'Tata 1109 EX',
+    'Tata 1120 LPT',
+    'Tata Ace Gold',
+  ];
+  ownerList: any[] = [];
   phoneAlreadyExists: boolean = false;
-  constructor(private router: Router,private formBuilder: FormBuilder, private apiService: ApiServiceService,private toastController: ToastController) { }
+  selectedTab: 'driver' | 'owner' = 'driver';
+  constructor(
+    private router: Router,
+    private formBuilder: FormBuilder,
+    private apiService: ApiServiceService,
+    private toastController: ToastController
+  ) {}
 
   ngOnInit() {
     this.initFarmerForm();
     this.getownerList();
   }
 
-   initFarmerForm() {
+  initFarmerForm() {
     this.driverRegisterForm = this.formBuilder.group({
-      fullName: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(35)]],
-      ownerName: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(35)]],
-      phone:  ['', [Validators.required, this.phoneNumberValidator()]],
+      fullName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(35),
+        ],
+      ],
+      ownerName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(35),
+        ],
+      ],
+      phone: ['', [Validators.required, this.phoneNumberValidator()]],
       truckType: ['', Validators.required],
-      licenseNumber: ['', Validators.required,Validators.pattern(/^[0-9]+$/)],
-      vehicleNumber: ['', [
-      Validators.required,
-      Validators.pattern(/^[A-Z0-9]+$/)
-      ]],
+      licenseNumber: ['', Validators.required, Validators.pattern(/^[0-9]+$/)],
+      vehicleNumber: [
+        '',
+        [Validators.required, Validators.pattern(/^[A-Z0-9]+$/)],
+      ],
+    });
+
+    this.ownerRegisterForm = this.formBuilder.group({
+      ownerName: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      phoneNumber: [
+        '',
+        [Validators.required, Validators.pattern('^[6-9]\\d{9}$')],
+      ],
+      vehicleNumber: ['', [Validators.required, Validators.minLength(10)]],
     });
   }
   getownerList() {
-      this.apiService.getApi(`${apis.ownerList}`).subscribe((response) => {
-        this.ownerList = response.owners;
-      })
+    this.apiService.getApi(`${apis.ownerList}`).subscribe((response) => {
+      this.ownerList = response.owners;
+    });
   }
   registerDriver() {
     const formData = this.driverRegisterForm?.value;
     // Only proceed if form is valid
-      console.log('Registering driver:', this.driver);
-      // your API call or logic here
-      const reqBody = {
-        "driverName": formData?.fullName,
-        "ownerName": formData?.ownerName.ownerName,
-        "phoneNumber": formData?.phone?.replace(/\D/g, ''),
-        "licenseNumber": formData?.licenseNumber,
-        "vehicleNumber": formData?.vehicleNumber,
-        "vehicleType": formData?.truckType,
-        "ownerId": formData?.ownerName.id,
-      };
-      console.log('Request Body:', reqBody);
-      this.apiService.postApi(`${apis.driverRegister}`, reqBody).subscribe((response) => {
+    console.log('Registering driver:', this.driver);
+    // your API call or logic here
+    const reqBody = {
+      driverName: formData?.fullName,
+      ownerName: formData?.ownerName.ownerName,
+      phoneNumber: formData?.phone?.replace(/\D/g, ''),
+      licenseNumber: formData?.licenseNumber,
+      vehicleNumber: formData?.vehicleNumber,
+      vehicleType: formData?.truckType,
+      ownerId: formData?.ownerName.id,
+    };
+    console.log('Request Body:', reqBody);
+    this.apiService
+      .postApi(`${apis.driverRegister}`, reqBody)
+      .subscribe((response) => {
         if (response.success === true) {
-           this.presentToast('Driver Registration successful!', 'success');
+          this.presentToast('Driver Registration successful!', 'success');
           this.router.navigate(['/tabs']);
-          this.driver = {}
+          this.driver = {};
         } else {
-            this.presentToast("Failed To Register!","danger")
+          this.presentToast('Failed To Register!', 'danger');
         }
-      })
-
-
+      });
   }
- onPhoneInput(event: any) {
+  registerOwner() {
+    if (this.ownerRegisterForm.valid) {
+      const formData = this.ownerRegisterForm.value;
+      const reqBody = {
+        ownerName: formData.ownerName,
+        phoneNumber: formData.phoneNumber,
+        hatcheryId: 1,
+        role: 'OWNER',
+        password: formData.password,
+      };
+      this.apiService
+        .postApi(`${apis.ownerRegister}`, reqBody)
+        .subscribe((response) => {
+          if (response.success === true) {
+            this.presentToast('Owner Registration successful!', 'success');
+            this.router.navigate(['/owner-login']);
+          } else {
+            this.presentToast('Failed To Register!', 'danger');
+          }
+        });
+    }
+  }
+  onPhoneInput(event: any) {
     let input = event.target.value.replace(/\D/g, '').slice(0, 12); // Max 12 digits
     let formatted = input;
     if (input.length === 10) {
@@ -93,9 +167,8 @@ ownerList:any[] = [];
     control?.markAsTouched();
     control?.updateValueAndValidity({ onlySelf: true });
     this.phoneAlreadyExists = false;
-
-  };
- phoneNumberValidator(): ValidatorFn {
+  }
+  phoneNumberValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value?.replace(/\D/g, '');
       if (!value) return null;
@@ -107,8 +180,8 @@ ownerList:any[] = [];
       }
       return null;
     };
-  };
-	onInputLimit(event: any,formValue:any): void {
+  }
+  onInputLimit(event: any, formValue: any): void {
     const input = event.target.value || '';
     const filtered = input.replace(/[^A-Za-z]/g, ''); // Allow only letters
     const control = this.driverRegisterForm.get(formValue);
@@ -123,7 +196,7 @@ ownerList:any[] = [];
       control?.updateValueAndValidity();
     }
   }
-  onInputNumberLimit(event: any,formValue:any): void {
+  onInputNumberLimit(event: any, formValue: any): void {
     const input = event.target.value || '';
     const filtered = input.replace(/[^A-Za-z0-9]/g, ''); // Allow only letters
     const control = this.driverRegisterForm.get(formValue);
@@ -139,14 +212,13 @@ ownerList:any[] = [];
     }
   }
 
-async presentToast(message: string, color: string = 'success') {
-  const toast = await this.toastController.create({
-    message,
-    duration: 3000,           // visible for 3 seconds
-    color,                    // 'success', 'danger', 'warning', etc.
-    position: 'bottom'
-  });
-  await toast.present();
-}
-
+  async presentToast(message: string, color: string = 'success') {
+    const toast = await this.toastController.create({
+      message,
+      duration: 3000, // visible for 3 seconds
+      color, // 'success', 'danger', 'warning', etc.
+      position: 'bottom',
+    });
+    await toast.present();
+  }
 }
