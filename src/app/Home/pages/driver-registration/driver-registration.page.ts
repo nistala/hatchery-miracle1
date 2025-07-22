@@ -144,7 +144,7 @@ export class DriverRegistrationPage implements OnInit {
         .subscribe((response) => {
           if (response.success === true) {
             this.presentToast('Owner Registration successful!', 'success');
-            this.router.navigate(['/owner-login']);
+            this.router.navigate(['/tabs/home']);
           } else {
             this.presentToast('Failed To Register!', 'danger');
           }
