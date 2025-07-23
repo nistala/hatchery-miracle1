@@ -48,7 +48,8 @@ export class DriverRegistrationPage implements OnInit {
   ];
   ownerList: any[] = [];
   phoneAlreadyExists: boolean = false;
-  selectedTab: 'driver' | 'owner' = 'driver';
+ // selectedTab: 'driver' | 'owner' = 'driver';
+ selectedTab = 'owner';
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
