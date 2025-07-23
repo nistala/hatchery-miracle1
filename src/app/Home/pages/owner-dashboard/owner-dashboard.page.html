@@ -1,150 +1,216 @@
-<div class="p-4 sm:p-6 max-w-6xl mx-auto w-full">
-
+<ion-content class="ion-padding">
   <!-- Header -->
-  <div class="flex justify-between items-center mb-4">
-    <div>
-      <h1 class="text-xl sm:text-2xl font-semibold">TruckTurn Dashboard</h1>
-      <p class="text-sm sm:text-md text-gray-600">Manage driver check-ins and rotations</p>
-    </div>
-  </div>
+  <ion-grid class="max-w-6xl mx-auto">
+    <ion-row class="mb-4">
+      <ion-col>
+        <h2 class="text-2xl font-semibold">TruckTurn Dashboard</h2>
+        <p class="text-sm text-gray-600">
+          Manage driver check-ins and rotations
+        </p>
+      </ion-col>
+    </ion-row>
 
-  <!-- Stats -->
-  <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-    <div class="border rounded-xl p-4 text-center shadow-md">
-      <div class="text-xl font-bold text-green-900 flex justify-center items-center gap-2">
-        👥 <span>{{ driverStatusDetails?.totalDrivers }}</span>
-      </div>
-      <p class="text-sm text-gray-600 mt-2">Total Drivers</p>
-    </div>
-    <div class="border rounded-xl p-4 text-center shadow-md">
-      <div class="text-xl font-bold text-green-600 flex justify-center items-center gap-2">
-        ✔️ <span>{{ driverStatusDetails?.availableCount }}</span>
-      </div>
-      <p class="text-sm text-gray-600 mt-2">Available</p>
-    </div>
-    <div class="border rounded-xl p-4 text-center shadow-md">
-      <div class="text-xl font-bold text-orange-500 flex justify-center items-center gap-2">
-        📅 <span>{{ driverStatusDetails?.checkedInCount }}</span>
-      </div>
-      <p class="text-sm text-gray-600 mt-2">Checked In</p>
-    </div>
-    <div class="border rounded-xl p-4 text-center shadow-md">
-      <div class="text-xl font-bold text-green-600 flex justify-center items-center gap-2">
-        🕒 <span>{{ driverStatusDetails?.totalRounds }}</span>
-      </div>
-      <p class="text-sm text-gray-600 mt-2">Rounds Completed</p>
-    </div>
-  </div>
+    <!-- Stats -->
+    <ion-row class="mb-2 -mx-1">
+      <ion-col size="6" size-md="3" class="px-1 mb-2">
+        <ion-card class="rounded-xl shadow-md m-0">
+          <ion-card-content class="p-3">
+            <h3 class="flex justify-center items-center gap-1 text-green-600">
+              <span class="text-xl">👥</span>
+              <span class="text-2xl font-extrabold">
+                {{ driverStatusDetails?.totalDrivers }}
+              </span>
+            </h3>
+            <p class="text-base font-medium text-gray-700 mt-1 text-center">
+              Total Drivers
+            </p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
 
-  <!-- Check-in Control -->
-  <div class="border rounded-xl mb-6">
-    <button
-      class="w-full flex justify-between items-center p-4 focus:outline-none"
-      (click)="checkinAccordionOpen = !checkinAccordionOpen"
-      [attr.aria-expanded]="checkinAccordionOpen"
-      aria-controls="checkin-accordion-content"
-    >
-      <span class="text-md font-semibold">Check-in Control</span>
-      <ion-icon [name]="checkinAccordionOpen ? 'chevron-up-outline' : 'chevron-down-outline'" class="text-xl"></ion-icon>
-    </button>
-    <div id="checkin-accordion-content" *ngIf="checkinAccordionOpen" class="px-4 pb-4">
-      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mb-2">
-        <button
-        [ngClass]="!enableCompleteRoundButton ? 'bg-gray-300 text-black px-4 py-2 rounded' : 'bg-green-700 text-white px-4 py-2 rounded'"
-          (click)="startNewRound()"
-          [disabled]="!enableCompleteRoundButton"
-          >
-          Start New Check-in Round
-        </button>
+      <ion-col size="6" size-md="3" class="px-1 mb-2">
+        <ion-card class="rounded-xl shadow-md m-0">
+          <ion-card-content class="p-3">
+            <h3 class="flex justify-center items-center gap-1 text-green-600">
+              <span class="text-xl">✔️</span>
+              <span class="text-2xl font-extrabold">
+                {{ driverStatusDetails?.availableCount }}
+              </span>
+            </h3>
+            <p class="text-base font-medium text-gray-700 mt-1 text-center">
+              Available
+            </p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
 
-        <button
-          [ngClass]=" !disableNewRoundButton  ? 'bg-gray-300 text-black px-4 py-2 rounded' : 'bg-[#0d416b] text-white px-4 py-2 rounded'"
-          (click)="completeCurrentRound()"
-          [disabled]="!disableNewRoundButton"
-        >
-          Complete Current Round
-        </button>
-      </div>
-      <!-- <p class="text-sm text-gray-500">No active check-in round. Start a new round to allow check-ins.</p> -->
-    </div>
-  </div>
+      <ion-col size="6" size-md="3" class="px-1 mb-2">
+        <ion-card class="rounded-xl shadow-md m-0">
+          <ion-card-content class="p-3">
+            <h3 class="flex justify-center items-center gap-1 text-green-600">
+              <span class="text-xl">📅</span>
+              <span class="text-2xl font-extrabold">
+                {{ driverStatusDetails?.checkedInCount }}
+              </span>
+            </h3>
+            <p class="text-base font-medium text-gray-700 mt-1 text-center">
+              Checked In
+            </p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
 
-  <!-- Driver Lists Tabs -->
-  <div class="mb-4 border-b border-gray-200 overflow-x-auto">
-    <ul class="flex whitespace-nowrap text-sm font-medium text-center">
-      <li class="mr-2">
-        <button (click)="activeTab = 'available'"
-          [ngClass]="{
-            'border-b-2 text-green-600 border-green-600': activeTab === 'available',
-            'text-gray-500 hover:text-green-600': activeTab !== 'available'
-          }"
-          class="inline-block p-2 sm:p-4 border-b-2 rounded-t-lg">Available</button>
-      </li>
-      <li class="mr-2">
-        <button (click)="activeTab = 'checkedIn'"
-          [ngClass]="{
-            'border-b-2 text-orange-600 border-orange-600': activeTab === 'checkedIn',
-            'text-gray-500 hover:text-orange-600': activeTab !== 'checkedIn'
-          }"
-          class="inline-block p-2 sm:p-4 border-b-2 rounded-t-lg">Checked-In</button>
-      </li>
-      <li>
-        <button (click)="activeTab = 'completed'"
-          [ngClass]="{
-            'border-b-2 text-blue-700 border-blue-700': activeTab === 'completed',
-            'text-gray-500 hover:text-blue-700': activeTab !== 'completed'
-          }"
-          class="inline-block p-2 sm:p-4 border-b-2 rounded-t-lg">Completed Rounds</button>
-      </li>
-    </ul>
-  </div>
+      <ion-col size="6" size-md="3" class="px-1 mb-2">
+        <ion-card class="rounded-xl shadow-md m-0">
+          <ion-card-content class="p-3">
+            <h3 class="flex justify-center items-center gap-1 text-green-600">
+              <span class="text-xl">🕒</span>
+              <span class="text-2xl font-extrabold">
+                {{ driverStatusDetails?.totalRounds }}
+              </span>
+            </h3>
+            <p class="text-base font-medium text-gray-700 mt-1 text-center">
+              Rounds Completed
+            </p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
 
-  <!-- Available Tab -->
-  <div *ngIf="activeTab === 'available'" class="bg-green-50 border rounded-xl p-4 max-h-[400px] sm:h-[400px] overflow-y-auto">
-    <h3 class="font-semibold text-green-800 mb-3">Available Drivers ({{ availableDriversList.length }})</h3>
-    <ng-container *ngIf="availableDriversList.length; else noAvailable">
-      <div *ngFor="let d of availableDriversList" class="border rounded-md p-3 mb-2 bg-white shadow-sm">
-        <div class="flex justify-between items-start">
-          <p class="font-semibold">{{ d.driverName.toUpperCase() }}</p>
-        </div>
-        <p class="text-sm text-gray-600"><b>Owner Name:</b> {{ d.ownerName }}</p>
-        <p class="text-sm text-gray-600"><b>Phone:</b> {{ d.phoneNumber }}</p>
-        <p class="text-sm text-gray-700"><b>Vehicle Number: </b> {{ d.vehicleNumber === null ? '-' : d.vehicleNumber }}</p>
-      </div>
-    </ng-container>
-    <ng-template #noAvailable><p>No available drivers</p></ng-template>
-  </div>
+    <!-- Check-in Control Accordion -->
+    <ion-card class="rounded-xl shadow-md">
+      <ion-card-content class="p-0">
+        <ion-accordion-group value="checkin-control">
+          <ion-accordion value="checkin-control">
+            <ion-item
+              slot="header"
+              button
+              (click)="checkinAccordionOpen = !checkinAccordionOpen"
+            >
+              <ion-card-title class="text-lg font-semibold text-gray-800">
+                Check-in Control
+              </ion-card-title>
+            </ion-item>
 
-  <!-- Checked-in Tab -->
-  <div *ngIf="activeTab === 'checkedIn'" class="bg-orange-50 border rounded-xl p-4 max-h-[400px] sm:h-[400px] overflow-y-auto">
-    <h3 class="font-semibold text-orange-700 mb-3">Checked-in Drivers ({{ checkedInDriversList.length }})</h3>
-    <ng-container *ngIf="checkedInDriversList.length; else noCheckedIn">
-      <div *ngFor="let d of checkedInDriversList" class="border rounded-md p-3 mb-2 bg-white shadow-sm">
-        <div class="flex justify-between items-start">
-          <p class="font-semibold">{{ d.driverName.toUpperCase() }}</p>
-        </div>
-        <p class="text-sm text-gray-700"><b>Owner Name:</b> {{ d.ownerName }}</p>
-        <p class="text-sm text-gray-700"><b>Phone:</b> {{ d.phoneNumber }}</p>
-        <p class="text-sm text-gray-700"><b>Vehicle Number: </b> {{ d.vehicleNumber === null ? '-' : d.vehicleNumber }}</p>
-        <p class="text-sm text-gray-700"><b>Drop Location:</b> {{ d.dropLocation }}</p>
-      </div>
-    </ng-container>
-    <ng-template #noCheckedIn><p>No checked-in drivers</p></ng-template>
-  </div>
+            <ion-list slot="content" class="ion-padding space-y-2">
+              <!-- Start New Round Button -->
+              <ion-button
+                expand="block"
+                fill="solid"
+                [disabled]="!enableCompleteRoundButton"
+                [style.--background]="enableCompleteRoundButton ? '#166534' : '#a4a6a5'"
+                [style.--color]="enableCompleteRoundButton ? 'white' : 'black'"
+                (click)="startNewRound()"
+              >
+                Start New Check-in Round
+              </ion-button>
 
-  <!-- Completed Tab -->
-  <div *ngIf="activeTab === 'completed'" class="bg-blue-50 border rounded-xl p-4 max-h-[400px] sm:h-[400px] overflow-y-auto">
-    <h3 class="font-semibold text-blue-700 mb-3">Round Completion ({{ roundsCompletedList.length }})</h3>
-    <ng-container *ngIf="roundsCompletedList.length; else noCompleted">
-      <div *ngFor="let d of roundsCompletedList" class="border rounded-md bg-white shadow-sm mb-2">
-        <button
-          class="bg-green-600 text-white text-lg px-3 py-2 rounded hover:bg-green-700 w-full whitespace-nowrap"
-          (click)="openRoundDetails(d)">
-          {{ d.round ? 'Round ' + d.round : d }} Completed
-        </button>
-      </div>
-    </ng-container>
-    <ng-template #noCompleted><p>No completed drivers</p></ng-template>
-  </div>
+              <!-- Complete Current Round Button -->
+              <ion-button
+                expand="block"
+                fill="solid"
+                [disabled]="!disableNewRoundButton"
+                [style.--background]="disableNewRoundButton ? '#0d416b' : '#a4a6a5'"
+                [style.--color]="disableNewRoundButton ? 'white' : 'black'"
+                (click)="completeCurrentRound()"
+              >
+                Complete Current Round
+              </ion-button>
+            </ion-list>
+          </ion-accordion>
+        </ion-accordion-group>
+      </ion-card-content>
+    </ion-card>
 
-</div>
+    <ion-card class="rounded-xl shadow-md border border-gray-300">
+      <!-- Tabs -->
+      <ion-card-content class="p-4">
+        <ion-segment [(ngModel)]="activeTab">
+          <ion-segment-button class="text-green-600" value="available">
+            Available
+          </ion-segment-button>
+          <ion-segment-button class="text-orange-600" value="checkedIn">
+            Checked-In
+          </ion-segment-button>
+          <ion-segment-button class="text-blue-600" value="completed">
+            Rounds
+          </ion-segment-button>
+        </ion-segment>
+
+        <!-- Available Tab -->
+        <ng-container *ngIf="activeTab === 'available'">
+          <div class="bg-green-50 border mt-4 rounded-xl p-4">
+            <h2 class="text-green-800 text-lg font-semibold mb-4">
+              Available Drivers ({{ availableDriversList.length }})
+            </h2>
+            <ng-container *ngIf="availableDriversList.length; else noAvailable">
+              <ion-list>
+                <ion-item *ngFor="let d of availableDriversList">
+                  <ion-label class="ion-text-wrap">
+                    <h3>{{ d.driverName.toUpperCase() }}</h3>
+                    <p><b>Owner Name:</b> {{ d.ownerName }}</p>
+                    <p><b>Phone:</b> {{ d.phoneNumber }}</p>
+                    <p><b>Vehicle Number:</b> {{ d.vehicleNumber ?? '-' }}</p>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+            </ng-container>
+            <ng-template #noAvailable>
+              <p class="text-center">No available drivers</p>
+            </ng-template>
+          </div>
+        </ng-container>
+
+        <!-- Checked-In Tab -->
+        <ng-container *ngIf="activeTab === 'checkedIn'">
+          <div class="bg-orange-50 border mt-4 rounded-xl p-4">
+            <h2 class="text-orange-800 text-lg font-semibold mb-4">
+              Available Drivers ({{ availableDriversList.length }})
+            </h2>
+            <ng-container *ngIf="checkedInDriversList.length; else noCheckedIn">
+              <ion-list>
+                <ion-item *ngFor="let d of checkedInDriversList">
+                  <ion-label class="ion-text-wrap">
+                    <h3>{{ d.driverName.toUpperCase() }}</h3>
+                    <p><b>Owner Name:</b> {{ d.ownerName }}</p>
+                    <p><b>Phone:</b> {{ d.phoneNumber }}</p>
+                    <p><b>Vehicle Number:</b> {{ d.vehicleNumber ?? '-' }}</p>
+                    <p><b>Drop Location:</b> {{ d.dropLocation }}</p>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+            </ng-container>
+            <ng-template #noCheckedIn>
+              <p class="text-center">No checked-in drivers</p>
+            </ng-template>
+          </div>
+        </ng-container>
+
+        <!-- Completed Tab -->
+        <ng-container *ngIf="activeTab === 'completed'">
+          <div class="bg-blue-50 border mt-4 rounded-xl p-4">
+            <h2 class="text-blue-800 text-lg font-semibold mb-4">
+              Completed Rounds ({{ roundsCompletedList.length }})
+            </h2>
+            <ng-container *ngIf="roundsCompletedList.length; else noCompleted">
+              <div class="space-y-2">
+                <ion-button
+                  *ngFor="let d of roundsCompletedList"
+                  expand="block"
+                  [style.--background]=" '#166534'"
+                  [style.--color]="'white'"
+                  (click)="openRoundDetails(d)"
+                >
+                  {{ d.round ? 'Round ' + d.round : d }} Completed
+                </ion-button>
+              </div>
+            </ng-container>
+            <ng-template #noCompleted>
+              <p class="text-center">No completed drivers</p>
+            </ng-template>
+          </div>
+        </ng-container>
+      </ion-card-content>
+    </ion-card>
+  </ion-grid>
+</ion-content>

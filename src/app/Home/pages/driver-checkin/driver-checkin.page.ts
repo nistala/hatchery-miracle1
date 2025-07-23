@@ -44,17 +44,17 @@ export class DriverCheckinPage {
 
   ngOnInit() {}
 
-  ionViewDidEnter() {
+  async ionViewDidEnter() {
     console.log('ionViewDidEnter called');
     this.getDriversList('');
-    const checkinBoolean = sessionStorage.getItem('moveToDriverCheckin');
+    const checkinBoolean = await this.storage.get('moveToDriverCheckin');
     console.log('Checkin Boolean:', checkinBoolean);
     if (checkinBoolean === 'true' || checkinBoolean === null) {
       this.driversStatus = true;
     } else if( checkinBoolean === 'false') {
       this.driversStatus = false;
     }
-    sessionStorage.setItem('moveToDriverCheckin',this.driversStatus.toString());
+    this.storage.set('moveToDriverCheckin',this.driversStatus);
   }
   async getDriversList(searchTerm: string) {
     this.isSubmitting = true;
@@ -76,11 +76,11 @@ export class DriverCheckinPage {
           this.driversList = res.availableDrivers || [];
           this.availableCount = res.availableCount || 0;
           if(this.driversList.length === 0) {
-             sessionStorage.setItem('moveToDriverCheckin', 'false');
+             this.storage.set('moveToDriverCheckin', 'false');
           }
-          console.log('Drivers fetched successfully:', this.driversList);
+          //console.log('Drivers fetched successfully:', this.driversList);
         }
-      },
+      }, 
       error: (err: any) => {
         console.error('Error fetching Driver Details:', err);
       },

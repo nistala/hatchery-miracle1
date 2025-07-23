@@ -2,3 +2,21 @@
 
   display: grid;
 }
+
+::ng-host .custom-complete-btn-enabled {
+  background-color: #0d416b !important;
+  color: white !important;
+}
+
+::ng-host .custom-complete-btn-disabled {
+  background-color: #d1d5db !important;
+  color: white !important;
+}
+
+::ng-host .custom-start-btn-enabled {
+  background-color: #166534 !important;
+  color: white !important;
+}
+
+
+

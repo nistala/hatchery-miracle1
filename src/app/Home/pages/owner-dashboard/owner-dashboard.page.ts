@@ -127,13 +127,13 @@ export class OwnerDashboardPage implements OnInit {
             if(res.success === true) {
             this.enableCompleteRoundButton = true;
             this.disableNewRoundButton = true;
-            this.moveToDriverCheckin = false;
-            sessionStorage.setItem('moveToDriverCheckin',this.moveToDriverCheckin.toString());
+            this.moveToDriverCheckin = true;
+            this.storage.set('moveToDriverCheckin',this.moveToDriverCheckin);
             }else{
-               this.enableCompleteRoundButton = false;
+            this.enableCompleteRoundButton = false;
             this.disableNewRoundButton = false;
-             this.moveToDriverCheckin = true;
-            sessionStorage.setItem('moveToDriverCheckin',this.moveToDriverCheckin.toString());
+             this.moveToDriverCheckin = false;
+            this.storage.set('moveToDriverCheckin',this.moveToDriverCheckin);
             }
             this.getDriversStatusDetails();
             }
