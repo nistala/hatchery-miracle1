@@ -2,20 +2,20 @@
 <div class="max-w-md mx-auto p-4">
   <div class="flex justify-center space-x-4 mb-6">
     <button
-      (click)="selectedTab = 'driver'"
-      [class.bg-green-800]="selectedTab === 'driver'"
-      [class.text-white]="selectedTab === 'driver'"
-      class="px-4 py-2 rounded-md font-medium transition-colors"
-    >
-      Driver Registration
-    </button>
-    <button
       (click)="selectedTab = 'owner'"
       [class.bg-green-800]="selectedTab === 'owner'"
       [class.text-white]="selectedTab === 'owner'"
       class="px-4 py-2 rounded-md font-medium transition-colors"
     >
       Owner Registration
+    </button>
+    <button
+      (click)="selectedTab = 'driver'"
+      [class.bg-green-800]="selectedTab === 'driver'"
+      [class.text-white]="selectedTab === 'driver'"
+      class="px-4 py-2 rounded-md font-medium transition-colors"
+    >
+      Driver Registration
     </button>
   </div>
 
