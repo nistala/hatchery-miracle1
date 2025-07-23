@@ -40,9 +40,9 @@ export class OwnerDashboardPage implements OnInit {
   }
   async getDriversStatusDetails() {
     this.isSubmitting = true;
-    const userId = await this.storage.get('userId')
+    const hatcheryId = await this.storage.get('hatcheryId')
     //console.log(userId);
-    const url = `${apis.driversStatusDetails}?ownerId=${userId}`;
+    const url = `${apis.driversStatusDetails}?hatcheryId=${hatcheryId}`;
 
     this.apiService.getApi(url).subscribe({
       next: (res: any) => {
@@ -104,12 +104,12 @@ export class OwnerDashboardPage implements OnInit {
     });
   }
 
-  startNewRound(){
+  async startNewRound (){
     //console.log(this.availableDriversList, 'Available Drivers List');
 
     if(this.availableDriversList.length !== 0) {
-    const userId = sessionStorage.getItem('userId');
-    const url = `${apis.newRound}?ownerId=${userId}`
+    const hatcheryId = await this.storage.get('hatcheryId')
+    const url = `${apis.newRound}?hatcheryId=${hatcheryId}`
     this.apiService.postApi(url, {}).subscribe({
       next: (res: any) => {
         this.isSubmitting = false;
@@ -155,11 +155,11 @@ export class OwnerDashboardPage implements OnInit {
 
   }
 
-  completeCurrentRound(){
-    const userId = sessionStorage.getItem('userId');
+  async completeCurrentRound(){
+    const hatcheryId = await this.storage.get('hatcheryId')
     const checkinBoolean = sessionStorage.getItem('moveToDriverCheckin');
 
-    const url = `${apis.completeCurrentRound}?ownerId=${userId}&round=${this.driverStatusDetails.latestRound}&flag=true`;
+    const url = `${apis.completeCurrentRound}?hatcheryId=${hatcheryId}&round=${this.driverStatusDetails.latestRound}&flag=true`;
     this.apiService.putApi(url, {}).subscribe({
       next: (res: any) => {
         this.isSubmitting = false;

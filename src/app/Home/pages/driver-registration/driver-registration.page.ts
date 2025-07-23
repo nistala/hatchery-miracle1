@@ -11,6 +11,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { Storage } from '@ionic/storage-angular';
 import { formatNumber } from '@angular/common';
 
 @Component({
@@ -52,7 +53,8 @@ export class DriverRegistrationPage implements OnInit {
     private router: Router,
     private formBuilder: FormBuilder,
     private apiService: ApiServiceService,
-    private toastController: ToastController
+    private toastController: ToastController,
+     private storage: Storage
   ) {}
 
   ngOnInit() {
@@ -89,12 +91,11 @@ export class DriverRegistrationPage implements OnInit {
 
     this.ownerRegisterForm = this.formBuilder.group({
       ownerName: ['', [Validators.required, Validators.minLength(6)]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
       phoneNumber: [
         '',
         [Validators.required, Validators.pattern('^[6-9]\\d{9}$')],
       ],
-      vehicleNumber: ['', [Validators.required, Validators.minLength(10)]],
+      ownerAddress: ['', [Validators.required, Validators.minLength(10)]],
     });
   }
   getownerList() {
@@ -102,11 +103,10 @@ export class DriverRegistrationPage implements OnInit {
       this.ownerList = response.owners;
     });
   }
-  registerDriver() {
+  async registerDriver() {
+    const hatcheryId = await this.storage.get('hatcheryId')
     const formData = this.driverRegisterForm?.value;
-    // Only proceed if form is valid
-    console.log('Registering driver:', this.driver);
-    // your API call or logic here
+   // console.log('Registering driver:', this.driver);
     const reqBody = {
       driverName: formData?.fullName,
       ownerName: formData?.ownerName.ownerName,
@@ -115,6 +115,8 @@ export class DriverRegistrationPage implements OnInit {
       vehicleNumber: formData?.vehicleNumber,
       vehicleType: formData?.truckType,
       ownerId: formData?.ownerName.id,
+      hatcheryId: hatcheryId,
+      role: 'DRIVER',
     };
     console.log('Request Body:', reqBody);
     this.apiService
@@ -129,15 +131,16 @@ export class DriverRegistrationPage implements OnInit {
         }
       });
   }
-  registerOwner() {
+  async registerOwner() {
+     const hatcheryId = await this.storage.get('hatcheryId')
     if (this.ownerRegisterForm.valid) {
       const formData = this.ownerRegisterForm.value;
       const reqBody = {
         ownerName: formData.ownerName,
         phoneNumber: formData.phoneNumber,
-        hatcheryId: 1,
+        hatcheryId: hatcheryId,
         role: 'OWNER',
-        password: formData.password,
+        address: formData.ownerAddress,
       };
       this.apiService
         .postApi(`${apis.ownerRegister}`, reqBody)

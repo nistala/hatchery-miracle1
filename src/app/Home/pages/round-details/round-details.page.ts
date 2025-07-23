@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { ApiServiceService } from 'src/app/services/api-service.service';
 import { apis } from 'src/app/services/apis';
+import { Storage } from '@ionic/storage-angular';
 @Component({
   selector: 'app-round-details',
   templateUrl: './round-details.page.html',
@@ -24,7 +25,8 @@ export class RoundDetailsPage implements OnInit {
     private aroute: ActivatedRoute,
     private router: Router,
     public apiService: ApiServiceService,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private storage: Storage
   ) {}
 
   ngOnInit() {}
@@ -39,10 +41,10 @@ export class RoundDetailsPage implements OnInit {
       }
     });
   }
-  getRoundDetails(roundId: number, searchTerm: string) {
+  async getRoundDetails(roundId: number, searchTerm: string) {
     this.isSubmitting = true;
-    const userId = sessionStorage.getItem('userId');
-    const url = `${apis.roundwiseDriverDetails}?round=${roundId}&ownerId=${userId}&search=${searchTerm? searchTerm : ''}`;
+    const hatcheryId = await this.storage.get('hatcheryId')
+    const url = `${apis.roundwiseDriverDetails}?round=${roundId}&hatcheryId=${hatcheryId}&search=${searchTerm? searchTerm : ''}`;
 
     this.apiService.getApi(url).subscribe({
       next: (res: any) => {

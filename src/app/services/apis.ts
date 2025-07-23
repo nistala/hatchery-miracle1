@@ -1,4 +1,6 @@
-const baseUrl = 'http://52.4.57.247:8080/hatchery'
+//const baseUrl = 'http://52.4.57.247:8080/hatchery'   //Deployed Dev URL
+const baseUrl = 'http://172.17.12.101:8083/hatchery'   //Local Dev URL
+
 export const apis = {
   //authentication
   ownerLogin: baseUrl + '/users/login',

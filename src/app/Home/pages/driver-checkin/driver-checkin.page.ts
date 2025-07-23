@@ -5,6 +5,7 @@ import { apis } from 'src/app/services/apis';
 import { ModalController, ToastController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 import { DropLocationModalPage } from './drop-location-modal/drop-location-modal.page';
+import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-driver-checkin',
@@ -37,7 +38,8 @@ export class DriverCheckinPage {
     private router: Router,
     public apiService: ApiServiceService,
     private toastController: ToastController,
-    private alertController: AlertController
+    private alertController: AlertController,
+     private storage: Storage
   ) {}
 
   ngOnInit() {}
@@ -54,12 +56,12 @@ export class DriverCheckinPage {
     }
     sessionStorage.setItem('moveToDriverCheckin',this.driversStatus.toString());
   }
-  getDriversList(searchTerm: string) {
+  async getDriversList(searchTerm: string) {
     this.isSubmitting = true;
-    const userId = sessionStorage.getItem('userId');
+   const hatcheryId = await this.storage.get('hatcheryId')
     const url = `${
       apis.availableDriversListForCheckIn
-    }?ownerId=${userId}&searchText=${searchTerm ? searchTerm : ''}`;
+    }?hatcheryId=${hatcheryId}&searchText=${searchTerm ? searchTerm : ''}`;
 
     this.apiService.getApi(url).subscribe({
       next: (res: any) => {

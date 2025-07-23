@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { ApiServiceService } from 'src/app/services/api-service.service';
 import { apis } from 'src/app/services/apis';
+import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-drivers-list',
@@ -17,7 +18,7 @@ searchTerm: string = '';
 
   filteredDrivers : any[] = [];
 
-  constructor(private router: Router, public apiService: ApiServiceService,private toastController: ToastController) {}
+  constructor(private router: Router, public apiService: ApiServiceService,private toastController: ToastController, private storage: Storage) {}
 
   ngOnInit() {}
 
@@ -25,10 +26,10 @@ searchTerm: string = '';
   ionViewWillEnter() {
     this.getDriversList('');
   }
-   getDriversList(searchTerm: string) {
+   async getDriversList(searchTerm: string) {
     this.isSubmitting = true;
-    const userId = sessionStorage.getItem('userId');
-    const url = `${apis.driversList}?ownerId=${userId}&searchText=${searchTerm? searchTerm : ''}`;
+   const hatcheryId = await this.storage.get('hatcheryId')
+    const url = `${apis.driversList}?hatcheryId=${hatcheryId}&searchText=${searchTerm? searchTerm : ''}`;
 
     this.apiService.getApi(url).subscribe({
       next: (res: any) => {

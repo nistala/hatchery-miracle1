@@ -15,7 +15,7 @@ export class OwnerLoginPage implements OnInit {
   username = '';
   password = '';
   showPassword = true;
-  constructor(private router: Router,private apiService: ApiServiceService,private toastController: ToastController, private storage: Storage) { 
+  constructor(private router: Router,private apiService: ApiServiceService,private toastController: ToastController, private storage: Storage) {
      this.storage.create();
   }
 
@@ -30,10 +30,10 @@ export class OwnerLoginPage implements OnInit {
       console.log('Login response:', response);
 
       if (response.success === true) {
-        sessionStorage.setItem("userId", response.userId);
+        sessionStorage.setItem("hatcheryId", response.hatcheryId);
         sessionStorage.setItem("userInfo", JSON.stringify(response));
         await this.storage.set('isLoggedIn', true);
-        await this.storage.set("userId", response.userId);
+        await this.storage.set("hatcheryId", response.hatcheryId);
         await this.storage.set("userInfo", JSON.stringify(response));
         this.presentToast("Login successful!","success")
         this.router.navigate(['/tabs']);

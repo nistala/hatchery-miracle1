@@ -187,22 +187,6 @@
         Owner name is required (min 6 characters).
       </p>
     </div>
-
-    <!-- Password -->
-    <div>
-      <label class="block text-sm font-medium text-gray-700">Password *</label>
-      <ion-input
-        type="password"
-        formControlName="password"
-        required
-        minlength="6"
-        class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600"
-      ></ion-input>
-      <p *ngIf="ownerRegisterForm.get('password')?.invalid && ownerRegisterForm.get('password')?.touched" class="text-red-600 text-xs">
-        Password must be at least 6 characters.
-      </p>
-    </div>
-
     <!-- Phone Number -->
     <div>
       <label class="block text-sm font-medium text-gray-700">Phone Number *</label>
@@ -223,38 +207,20 @@
         </small>
       </ion-text>
     </div>
-
-    <!-- Vehicle Number -->
+    <!-- Owner Address -->
     <div>
-      <label class="block text-sm font-medium text-gray-700">Vehicle Number *</label>
+      <label class="block text-sm font-medium text-gray-700">Owner Address *</label>
       <ion-input
         type="text"
-        formControlName="vehicleNumber"
+        formControlName="ownerAddress"
+        (ionInput)="onInputLimit($event, 'ownerAddress')"
         required
-        minlength="5"
-        (ionInput)="onInputLimit($event, 'vehicleNumber')"
         class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600"
       ></ion-input>
-      <p *ngIf="ownerRegisterForm.get('vehicleNumber')?.invalid && ownerRegisterForm.get('vehicleNumber')?.touched" class="text-red-600 text-xs">
-        Vehicle number is required (min 10 characters).
+      <p *ngIf="ownerRegisterForm.get('ownerAddress')?.invalid && ownerRegisterForm.get('ownerAddress')?.touched" class="text-red-600 text-xs">
+        Owner address is required (min 10 characters).
       </p>
     </div>
-<!-- <div>
-  <label class="block text-sm font-medium text-gray-700">Vehicle Number *</label>
-  <ion-select
-    formControlName="vehicleNumber"
-    placeholder="Select Vehicle Number"
-    interface="popover"
-    class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600"
-  >
-    <ion-select-option *ngFor="let number of vehicleNumbers" [value]="number">
-      {{ number }}
-    </ion-select-option>
-  </ion-select>
-  <p *ngIf="ownerRegisterForm.get('vehicleNumber')?.invalid && ownerRegisterForm.get('vehicleNumber')?.touched" class="text-red-600 text-xs">
-    Vehicle number is required.
-  </p>
-</div> -->
     <button
       type="submit"
       [disabled]="ownerRegisterForm.invalid"
